@@ -1,0 +1,320 @@
+/* Modern CSS Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+    --glass: rgba(255, 255, 255, 0.1);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 6px 12px -1px rgba(0, 0, 0, 0.2);
+}
+
+body {
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+/* Modern Header */
+header {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background-image: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+nav ul li a {
+    color: #0f172a;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav ul li a:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+}
+
+/* Modern Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("photo/background.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h2 {
+    font-size: 4rem;
+    background-image: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1.5rem;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.hero .btn {
+    background: var(--gradient);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: bounce 2s infinite;
+}
+
+.hero .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+
+/* Leakage Card Container */
+.leakage-card-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+/* Leakage Card */
+.card-leakage {
+    width: 300px; /* Adjust the width as needed */
+    text-align: center;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+/* Modern Dashboard Section */
+.dashboard {
+    padding: 6rem 2rem;
+    background: #f1f5f9;
+}
+
+.dashboard-title {
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    animation: slideIn 1s ease-in-out;
+}
+
+.dashboard-title::after {
+    content: '';
+    width: 80px;
+    height: 4px;
+    background: var(--gradient);
+    position: absolute;
+    bottom: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto 4rem;
+}
+
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.chart {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow);
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Modern Status Indicators */
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    display: inline-block;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero h2 {
+        font-size: 2.5rem;
+    }
+    
+    .dashboard-title {
+        font-size: 2.5rem;
+    }
+    
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Micro Interactions */
+.card:hover .card-icon {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Modern Form Elements */
+.input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Modern Footer */
+footer {
+    background: #0f172a;
+    color: white;
+    padding: 3rem 2rem;
+    margin-top: 6rem;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

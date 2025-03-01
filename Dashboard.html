@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Animated Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://storage.googleapis.com/flowsystem-com/styles.css">
+
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="nav">
+            <h1>FlowGuard</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">About Us</a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard">
+        <div class="container">
+            <h1 class="dashboard-title">Dashboard</h1>
+            <div class="dashboard-cards">
+                <!-- Card 1: PH Level -->
+                <div class="card card-ph" id="peeH">
+                    <h3>PH Level</h3>
+                    <h3><p id="phLevel">Loading...</p></h3>
+                    
+                    <h3><p id="peee">Loading...</p></h3>
+                </div>
+
+                <!-- Card 2: Turbidity -->
+                <div class="card card-turbidity" id="Turbid">
+                    <h3>Turbidity</h3>
+                    <p id="turbidityValue">Loading...</p>
+                    
+                    <h3><p id="turbbb">Loading...</p></h3>
+                </div>
+            </div>
+
+            <div class="charts">
+                <!-- Chart 1: Water Flow 1 -->
+                <div class="chart">
+                    <h3>Water Flow 1</h3>
+                    <p id="flow1Value">Loading...</p>
+                </div>
+                <!-- Chart 2: Water Flow 2 -->
+                <div class="chart">
+                    <h3>Water Flow 2</h3>
+                    <p id="flow2Value">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Card 3: Leakage Status -->
+            <div class="leakage-card-container">
+                <div class="card card-leakage" id="stat">
+                    <h3>Leakage Status</h3>
+                    <p id="leakageStatus">Loading...</p>
+                    <h3> <p id="lek">Loading...</p></h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="footer">
+        <p>&copy; A Research Project
+            Presented to the Faculty of the
+            Computer Engineering Department
+            College of Engineering
+            Technological University of the Philippines Visayas</p>
+    </footer>
+
+    <script>
+    async function fetchSensorData() {
+    try {
+        const [response, wow1, wow2] = await Promise.all([
+            fetch('http://192.168.254.106/flowguard/getquality.php'),
+            fetch('http://192.168.254.106/flowguard/getflow1.php'),
+            fetch('http://192.168.254.106/flowguard/getflow2.php'),
+            fetch('http://192.168.254.106/flowguard/analysis_ph.php'),
+            fetch('http://192.168.254.106/flowguard/analysis_turb.php')
+        ]);
+
+        const data = await response.json();
+        const misig = await wow1.json();
+        const misigg = await wow2.json();
+
+        document.getElementById('flow1Value').textContent = misig.fr1;
+        document.getElementById('flow2Value').textContent = misigg.fr2;
+        document.getElementById('turbidityValue').textContent = data.Turbidity;
+        document.getElementById('phLevel').textContent = data.PH_level;
+
+        const Turbid = document.getElementById('Turbid');
+        if (data.Turbidity > 3) {
+            
+            sem = 1;
+            Turbid.style.backgroundColor = "blue";
+        } else if (data.Turbidity >= 1.5 && data.Turbidity <= 3) {
+            
+            sem = 2;
+            Turbid.style.backgroundColor = "grey";
+        } else if (data.Turbidity < 1.5) {
+            
+            sem = 3;
+            Turbid.style.backgroundColor = "red";
+        }
+
+        const peeH = document.getElementById('peeH');
+        let sam = 0; // Initialize sam
+        if (data.PH_level < 6) {
+           
+            sam = 1; // Acidic
+            peeH.style.backgroundColor = "red";
+        } else if (data.PH_level >= 6 && data.PH_level <= 8) {
+            
+            sam = 2; // Neutral
+            peeH.style.backgroundColor = "blue";
+        } else if (data.PH_level > 8) {
+            
+            sam = 3; // Alkaline
+            peeH.style.backgroundColor = "green";
+        }
+
+        // Fetch data from PHP based on the `sam` value
+        if (sam > 0) {
+            const phDataResponse = await fetch(`http://192.168.254.106/flowguard/analysis_ph.php?id=${sam}`);
+            const phData = await phDataResponse.json();
+            if (phData.error) {
+                document.getElementById('peee').textContent = phData.error; // Display error if any
+            } else {
+                document.getElementById('peee').textContent = phData.ph_outcome; // Replace 'some_field' with the actual field name
+            }
+        }
+
+        if (sem > 0) {
+            const turbDataResponse = await fetch(`http://192.168.254.106/flowguard/analysis_turb.php?id=${sem}`);
+            const turbData = await turbDataResponse.json();
+            if (turbData.error) {
+                document.getElementById('turbbb').textContent = turbData.error; // Display error if any
+            } else {
+                document.getElementById('turbbb').textContent = turbData.turbidity_outcome; // Replace 'some_field' with the actual field name
+            }
+        }
+
+
+        // Check for leakage status
+        const stat = document.getElementById('stat');
+        const leakageStatus = document.getElementById('leakageStatus');
+        const flow1Value = parseFloat(misig.fr1);
+        const flow2Value = parseFloat(misigg.fr2);
+        if (Math.abs(flow1Value - flow2Value) > 2) {
+            leakageStatus.textContent = 'Leakage Detected';
+            leak = 2;
+            stat.style.backgroundColor = 'red';
+        } else {
+            leakageStatus.textContent = 'No Leakage';
+            leak = 1;
+            stat.style.backgroundColor = 'green';
+        }
+
+        if (leak > 0) {
+            const lekDataResponse = await fetch(`http://192.168.254.106/flowguard/analysis_leak.php?id=${leak}`);
+            const lekData = await lekDataResponse.json();
+            if (lekData.error) {
+                document.getElementById('lek').textContent = lekData.error; // Display error if any
+            } else {
+                document.getElementById('lek').textContent = lekData.flow_outcome; // Replace 'some_field' with the actual field name
+            }
+        }
+
+
+    } catch (error) {
+        console.error("Error fetching sensor data:", error);
+    }
+}
+
+// Initial fetch
+fetchSensorData();
+
+// Fetch data every 2 seconds
+setInterval(fetchSensorData, 2000);
+
+   
+    </script>
+</body>
+</html>
